@@ -11,7 +11,7 @@ class StoreTest(BaseTest):
 
                 self.assertEqual(res.status_code, 201)
                 self.assertIsNotNone(StoreModel.find_by_name('test'))
-                self.assertDictEqual({'name': 'test', 'items': []}, res.get_json())
+                self.assertDictEqual({'id': 1, 'name': 'test', 'items': []}, res.get_json())
 
     def test_create_duplicate_store(self):
         with self.app() as client:
@@ -37,7 +37,7 @@ class StoreTest(BaseTest):
                 res = client.get('/store/test')
 
                 self.assertEqual(res.status_code, 200)
-                self.assertDictEqual({'name': 'test', 'items': []}, res.get_json())
+                self.assertDictEqual({'id': 1, 'name': 'test', 'items': []}, res.get_json())
 
     def test_store_not_found(self):
         with self.app() as client:
@@ -55,7 +55,7 @@ class StoreTest(BaseTest):
                 res = client.get('/store/test')
 
                 self.assertEqual(res.status_code, 200)
-                self.assertDictEqual({'name': 'test', 'items': [{'name': 'test', 'price': 19.99}]}, res.get_json())
+                self.assertDictEqual({'id': 1, 'name': 'test', 'items': [{'name': 'test', 'price': 19.99}]}, res.get_json())
 
     def test_store_list(self):
         with self.app() as client:
@@ -63,7 +63,7 @@ class StoreTest(BaseTest):
                 StoreModel('test').save_to_db()
                 res = client.get('/stores')
 
-                self.assertDictEqual({'stores': [{'name': 'test', 'items': []}]}, res.get_json())
+                self.assertDictEqual({'stores': [{'id': 1, 'name': 'test', 'items': []}]}, res.get_json())
 
     def test_store_list_with_items(self):
         with self.app() as client:
@@ -72,5 +72,5 @@ class StoreTest(BaseTest):
                 ItemModel('test', 19.99, 1).save_to_db()
                 res = client.get('/stores')
 
-                self.assertDictEqual({'stores': [{'name': 'test', 'items': [{'name': 'test', 'price': 19.99}]}]},
+                self.assertDictEqual({'stores': [{'id': 1, 'name': 'test', 'items': [{'name': 'test', 'price': 19.99}]}]},
                                      res.get_json())
